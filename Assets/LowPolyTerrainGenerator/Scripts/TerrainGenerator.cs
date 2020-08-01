@@ -8,7 +8,7 @@ using UnityEngine;
 public class TerrainGenerator : MonoBehaviour
 {
     [Header("General Settings")]
-    public int seed;
+    public int Seed;
     [Range(1, 1000000), SerializeField] private int _sizeX;
     [Range(1, 1000000), SerializeField] private int _sizeY;
 
@@ -41,15 +41,15 @@ public class TerrainGenerator : MonoBehaviour
     private UnityEngine.Mesh terrainMesh;
     private List<float> heights = new List<float>();
 
-    private float minNoiseHeight;
-    private float maxNoiseHeight;
+    public float MinNoiseHeight { get; private set; }
+    public float MaxNoiseHeight { get; private set; }
     private System.Random rand;
 
     public void Build()
     {
         System.DateTime startTime = System.DateTime.Now;
         polygon = new Polygon();
-        rand = new System.Random(seed);
+        rand = new System.Random(Seed);
 
         for (int i = 0; i < _pointDensity; i++)
         {
@@ -138,8 +138,8 @@ public class TerrainGenerator : MonoBehaviour
 
     private void SetHeight()
     {
-        minNoiseHeight = float.PositiveInfinity;
-        maxNoiseHeight = float.NegativeInfinity;
+        MinNoiseHeight = float.PositiveInfinity;
+        MaxNoiseHeight = float.NegativeInfinity;
         heights = new List<float>();
 
         for (int i = 0; i < mesh.vertices.Count; i++)
@@ -155,7 +155,7 @@ public class TerrainGenerator : MonoBehaviour
                 float xValue = (float)mesh.vertices[i].x / _scale * frequency;
                 float yValue = (float)mesh.vertices[i].y / _scale * frequency;
 
-                float perlinValue = Mathf.PerlinNoise(xValue + Offset.x + seed, yValue + Offset.y + seed) * 2 - 1;
+                float perlinValue = Mathf.PerlinNoise(xValue + Offset.x + Seed, yValue + Offset.y + Seed) * 2 - 1;
                 perlinValue *= _dampening;
 
                 noiseHeight += perlinValue * amplitude;
@@ -164,13 +164,13 @@ public class TerrainGenerator : MonoBehaviour
                 frequency *= _lacunarity;
             }
 
-            if (noiseHeight > maxNoiseHeight)
+            if (noiseHeight > MaxNoiseHeight)
             {
-                maxNoiseHeight = noiseHeight;
+                MaxNoiseHeight = noiseHeight;
             }
-            else if (noiseHeight < minNoiseHeight)
+            else if (noiseHeight < MinNoiseHeight)
             {
-                minNoiseHeight = noiseHeight;
+                MinNoiseHeight = noiseHeight;
             }
 
             noiseHeight = (noiseHeight < 0f) ? noiseHeight * _heightScale / 10f : noiseHeight * _heightScale;
@@ -188,7 +188,7 @@ public class TerrainGenerator : MonoBehaviour
         var currentHeight = heights[triangle.vertices[0].id] + heights[triangle.vertices[1].id] + heights[triangle.vertices[2].id];
         currentHeight /= 3;
         currentHeight = (currentHeight < 0f) ? currentHeight / _heightScale * 10f : currentHeight / _heightScale;
-        var gradientVal = Mathf.InverseLerp(minNoiseHeight, maxNoiseHeight, currentHeight);
+        var gradientVal = Mathf.InverseLerp(MinNoiseHeight, MaxNoiseHeight, currentHeight);
         return _heightGradient.Evaluate(gradientVal);
     }
     public void Destroy()
@@ -197,7 +197,7 @@ public class TerrainGenerator : MonoBehaviour
     }
     public void NewSeed()
     {
-        seed = Random.Range(0, 10000);
+        Seed = Random.Range(0, 10000);
     }
     public void NewColorSet()
     {
@@ -211,5 +211,10 @@ public class TerrainGenerator : MonoBehaviour
     private Color RandomColor()
     {
         return new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f), 1f);
+    }
+
+    public Vector2Int GetSize()
+    {
+        return new Vector2Int(_sizeX, _sizeY);
     }
 }
