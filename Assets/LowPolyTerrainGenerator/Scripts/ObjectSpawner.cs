@@ -49,7 +49,7 @@ public class ObjectSpawner : MonoBehaviour
                             float currentHeightPercentage = (hit.point.y - minHeight) / (maxHeight - minHeight);
                             if (currentHeightPercentage <= spawnObject.MaxHeightPercentage && currentHeightPercentage >= spawnObject.MinHeightPercentage)
                             {
-                                var prefab = Instantiate(spawnObject.Prefab, hit.point, Quaternion.identity);
+                                var prefab = Instantiate(spawnObject.Prefab, hit.point + spawnObject.Offset, Quaternion.Euler(spawnObject.Rotation));
                                 prefab.transform.SetParent(_prefabsParent);
                             }
                         }

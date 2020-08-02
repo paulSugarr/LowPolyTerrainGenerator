@@ -11,6 +11,8 @@ public class SpawnObject
     [Range(1, 1000)] public int SpawnStep;
     [Range(0, 1)] public float MaxHeightPercentage;
     [Range(0, 1)] public float MinHeightPercentage;
+    public Vector3 Offset;
+    public Vector3 Rotation;
 
     public SpawnObject(float probability, int spawnStep, GameObject prefab, float maxHeightPercentage,
                        float minHeightPercentage)

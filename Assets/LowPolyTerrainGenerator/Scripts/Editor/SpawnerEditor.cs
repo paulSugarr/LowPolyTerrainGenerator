@@ -55,7 +55,8 @@ public class SpawnerEditor : Editor
         var objects = _spawner.SpawningObjects;
         if (objects == null) { objects = new List<SpawnObject>(); }
         reordableObjects = new ReorderableList(serializedObject, serializedObject.FindProperty("SpawningObjects"), true, true, true, true);
-        reordableObjects.elementHeight = 120;
+        reordableObjects.elementHeight = 180;
+        
         reordableObjects.drawHeaderCallback = (Rect rect) =>
         {
             EditorGUI.LabelField(rect, "Spawn Object Types");
@@ -69,6 +70,7 @@ public class SpawnerEditor : Editor
         {
             objects.RemoveAt(list.index);
         };
+
         reordableObjects.drawElementCallback = (Rect rect, int index, bool isActive, bool isFocused) =>
         {
             rect.y += 5;
@@ -76,10 +78,11 @@ public class SpawnerEditor : Editor
 
             objects[index].Prefab = newObject;
             Texture2D icon;
-
+            SerializedProperty element = reordableObjects.serializedProperty.GetArrayElementAtIndex(index);
+            
             if (newObject != null)
             {
-                SerializedProperty element = reordableObjects.serializedProperty.GetArrayElementAtIndex(index);
+                
                 icon = AssetPreview.GetAssetPreview(objects[index].Prefab);
             }
             else
@@ -110,8 +113,13 @@ public class SpawnerEditor : Editor
             EditorGUI.LabelField(new Rect(rect.x + 60, rect.y, rect.width / 4, lineHeight), string.Format("Min Height ", index));
             objects[index].MinHeightPercentage = EditorGUI.Slider(new Rect(rect.x + 160, rect.y, EditorGUIUtility.currentViewWidth / 3, lineHeight),
                 objects[index].MinHeightPercentage, 0f, 1f);
+            rect.y += lineHeightSpace;
 
+            objects[index].Offset = EditorGUI.Vector3Field(new Rect(rect.x, rect.y, rect.width, lineHeight), "Offset", objects[index].Offset);
+            rect.y += lineHeightSpace;
 
+            objects[index].Rotation = EditorGUI.Vector3Field(new Rect(rect.x, rect.y, rect.width, lineHeight), "Rotation", objects[index].Rotation);
+            rect.y += lineHeightSpace;
 
         };
 
