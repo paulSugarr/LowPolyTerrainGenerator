@@ -2,24 +2,23 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SpawnObjects : MonoBehaviour
+public class ObjectSpawner : MonoBehaviour
 {
     [Header("Main Settings")]
     [SerializeField] private TerrainGenerator _terrainGenerator;
     [SerializeField] private Transform _prefabsParent;
 
-
-    public List<GameObject> Prefabs;
-
-    public List<SpawnObject> _spawnObjects;
+    [HideInInspector] public List<SpawnObject> SpawningObjects;
 
     private System.Random rand;
 
     public void Spawn()
     {
         Clear();
-        foreach (var spawnObject in _spawnObjects)
+        if (SpawningObjects == null) { SpawningObjects = new List<SpawnObject>(); }
+        foreach (var spawnObject in SpawningObjects)
         {
+            if (spawnObject.Prefab == null) { continue; }
             rand = new System.Random(_terrainGenerator.Seed);
             var terrainSize = _terrainGenerator.GetSize();
             long pointCount = terrainSize.x * terrainSize.y;
