@@ -1,1 +1,19 @@
-# LowPolyTerrainGenerator
+# LowPoly Terrain Generator
+
+# Удобный и простой в использовании генератор низкополигональных террейнов.
+
+![alt text](https://i.ibb.co/bg8HbCD/image.png)
+
+
+Имеется возможность создавать террейн как в редакторе, так и во время исполнения. Также доступна рандомизация цветов по высоте
+
+![alt text](https://i.ibb.co/RYm3b8x/image.png)
+
+
+Инспектор для работы с террейном
+
+![alt text](https://i.ibb.co/G97wj5F/image.png)
+
+
+Кроме того, есть возможность спауна различных объектов по высоте. Инспектор для работы со спаунерами:
+![alt text](https://i.ibb.co/Cn9p1wb/image.png)
